@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runaway Image</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffcccb;
+            overflow: hidden;
+            position: relative;
+        }
+        .runaway-image {
+            position: absolute;
+            width: 200px;
+            height: auto;
+            transition: left 0.1s ease-out, top 0.1s ease-out;
+            border-radius: 100%;
+        }
+    </style>
+</head>
+<body>
+    <img src="./akshay-kumar-smile-meme.webp" alt="Runaway" class="runaway-image" id="runaway">
+    
+    <script>
+        const image = document.getElementById("runaway");
+        const speed = 150;
+
+        function getRandomPosition() {
+            const maxX = window.innerWidth - image.clientWidth;
+            const maxY = window.innerHeight - image.clientHeight;
+            let x = Math.random() * maxX;
+            let y = Math.random() * maxY;
+            x = Math.max(0, Math.min(maxX, x));
+            y = Math.max(0, Math.min(maxY, y));
+            return { x, y };
+        }
+
+        function moveImage() {
+            const { x, y } = getRandomPosition();
+            image.style.left = `${x}px`;
+            image.style.top = `${y}px`;
+        }
+
+        document.addEventListener("mousemove", (event) => {
+            const imgRect = image.getBoundingClientRect();
+            const imgX = imgRect.left + imgRect.width / 2;
+            const imgY = imgRect.top + imgRect.height / 2;
+            const deltaX = event.clientX - imgX;
+            const deltaY = event.clientY - imgY;
+            const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
+            if (distance < 150) {
+                moveImage();
+            }
+        });
+
+        image.style.position = "absolute";
+        moveImage();
+    </script>
+</body>
+</html>
